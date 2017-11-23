@@ -44,3 +44,6 @@ tags
 *.exe
 *.out
 *.app
+
+# from youcompleteme
+compile_commands.json
