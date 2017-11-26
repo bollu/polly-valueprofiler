@@ -15,15 +15,23 @@ using Value = int;
 using Histogram = map<Value, Frequency>;
 map<string, Histogram> NameToHistogram;
 
+#define PREFIX "valueprofiler"
+
+#define DEBUG(x) do {} while(0);
+
 void profile_value(const char *uniquename, uint64_t value) {
+    DEBUG(printf("%s adding %s: %d\n", PREFIX, uniquename, value));
     NameToHistogram[std::string(uniquename)][value]++;
 }
 
 json histogram_to_json(const Histogram &h) {
     json j;
     for (auto it : h) {
-        j[it.first] = it.second;
+        DEBUG(printf("\thistogram| %d:%d\n", it.first, it.second));
+        j[std::to_string(it.first)] = it.second;
     }
+
+    DEBUG(std::cout << "\tfinal json for histogram: " << j << "\n");
     return j;
 }
 
@@ -32,7 +40,7 @@ void dump_values(const char *filename) {
     for (auto it : NameToHistogram) {
         const std::string name = it.first;
         const Histogram h = it.second;
-        j[it.first] = histogram_to_json(h);
+        j[name] = histogram_to_json(h);
     }
 
     std::ofstream of;
