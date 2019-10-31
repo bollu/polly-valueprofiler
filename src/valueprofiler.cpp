@@ -69,4 +69,11 @@ void vp_profile_value_f64(const char *uniquename, double value) {
 void vp_dump_values(const char *filename) {
     dump_values(filename);
 }
+
+void vp_profile_value(const char *uniquename, int64_t value) {
+    // cast bit-pattern of value to tmp
+    uint64_t tmp;
+    std::memcpy(&tmp, &value, sizeof(tmp));
+    profile_value(uniquename, tmp);
+}
 } // end extern C
